@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delipostres</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff8f0;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #ff6f61;
+            padding: 20px;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .content {
+            margin: 50px auto;
+            max-width: 900px;
+        }
+        .postres-list {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .postre {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .postre img {
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .postre:hover {
+            transform: scale(1.07);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        .nutrientes-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .carrito-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff6f61;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .carrito-modal {
+            position: fixed;
+            bottom: 60px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        .carrito-modal.active {
+            display: block;
+        }
+    </style>
+    <script>
+        let carrito = [];
+
+        function mostrarNutrientes(texto) {
+            document.getElementById('nutrientes-texto').innerText = texto;
+            document.getElementById('nutrientes-container').classList.add('active');
+        }
+
+        function agregarAlCarrito(nombre, precio) {
+            const producto = carrito.find(item => item.nombre === nombre);
+            if (producto) {
+                producto.cantidad++;
+            } else {
+                carrito.push({ nombre, precio, cantidad: 1 });
+            }
+            actualizarCarrito();
+        }
+
+        function eliminarDelCarrito(nombre) {
+            carrito = carrito.filter(item => item.nombre !== nombre);
+            actualizarCarrito();
+        }
+
+        function actualizarCarrito() {
+            const carritoLista = document.getElementById('carrito-lista');
+            const totalPrecio = document.getElementById('total-precio');
+            carritoLista.innerHTML = '';
+            let total = 0;
+            carrito.forEach(item => {
+                total += item.precio * item.cantidad;
+                const li = document.createElement('li');
+                li.innerHTML = `${item.nombre} - $${item.precio.toLocaleString()} x ${item.cantidad} 
+                <button onclick="eliminarDelCarrito('${item.nombre}')">❌</button>`;
+                carritoLista.appendChild(li);
+            });
+            totalPrecio.innerText = `Total: $${total.toLocaleString()}`;
+        }
+
+        function toggleCarrito() {
+            document.getElementById('carrito-modal').classList.toggle('active');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Delipostres</h1>
+        <p>Descubre los nutrientes y beneficios de nuestros postres</p>
+    </header>
+    
+    <div class="content">
+        <h2>Nuestros Postres</h2>
+        <div class="postres-list">
+            <div class="postre">
+                <img src="pastel-de-fresa.png" alt="Pastel de Fresa" onclick="mostrarNutrientes('Pastel de Fresa: Alto en vitamina C (por las fresas).')">
+                <h3>Pastel de Fresa</h3>
+                <p class="price">$30,000</p>
+                <button onclick="agregarAlCarrito('Pastel de Fresa', 30000)">Añadir al Carrito</button>
+            </div>
+            <div class="postre">
+                <img src="galletas-de-avena.png" alt="Galletas de Avena" onclick="mostrarNutrientes('Galletas de Avena: Fuente de fibra (avena).')">
+                <h3>Galletas de Avena</h3>
+                <p class="price">$15,000</p>
+                <button onclick="agregarAlCarrito('Galletas de Avena', 15000)">Añadir al Carrito</button>
+            </div>
+            <div class="postre">
+                <img src="tiramisu.png" alt="Tiramisú" onclick="mostrarNutrientes('Tiramisú: Aporta energía (café y cacao).')">
+                <h3>Tiramisú</h3>
+                <p class="price">$40,000</p>
+                <button onclick="agregarAlCarrito('Tiramisú', 40000)">Añadir al Carrito</button>
+            </div>
+            <div class="postre">
+                <img src="cheesecake-frutos-rojos.png" alt="Cheesecake de Frutos Rojos" onclick="mostrarNutrientes('Cheesecake de Frutos Rojos: Rico en antioxidantes (frutos rojos).')">
+                <h3>Cheesecake de Frutos Rojos</h3>
+                <p class="price">$35,000</p>
+                <button onclick="agregarAlCarrito('Cheesecake de Frutos Rojos', 35000)">Añadir al Carrito</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="nutrientes-container" class="nutrientes-container"><p id="nutrientes-texto"></p></div>
+    <div class="carrito-container" onclick="toggleCarrito()">🛒 Ver Carrito</div>
+    <div id="carrito-modal" class="carrito-modal">
+        <h3>Carrito de Compras</h3>
+        <ul id="carrito-lista"></ul>
+        <h3 id="total-precio">Total: $0</h3>
+    </div>
+</body>
+</html>
